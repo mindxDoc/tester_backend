@@ -31,7 +31,7 @@ const options = {
         },
         servers: [
             {
-                url: `${process.env.SWAGGER_URL}${port}`,
+                url: process.env.SWAGGER_URL,
             },
         ],
     },
