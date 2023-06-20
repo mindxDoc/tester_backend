@@ -47,7 +47,7 @@ app.use(
 
 // Create GET request
 app.get("/", (req, res) => {
-    res.send("Learn on MindX");
+    res.send("Learn on MindX ⌚");
   });
 
 app.get('/api/v1/books', async (req, res) => {
