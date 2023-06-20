@@ -8,7 +8,7 @@ const app = express(),
     swaggerJsdoc = require("swagger-jsdoc"),
     swaggerUi = require("swagger-ui-express");
 
-app.use(express.json());
+app.use(express.static('public'))
 const port = process.env.PORT || 3001;
 
 const options = {
@@ -47,7 +47,7 @@ app.use(
 
 // Create GET request
 app.get("/", (req, res) => {
-    res.send("Learn on MindX ⌚");
+    res.sendFile('index.html', {root: path.join(__dirname, 'public')});
   });
 
 app.get('/api/v1/books', async (req, res) => {

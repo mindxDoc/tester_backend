@@ -4,8 +4,7 @@
   "description": "Book Review System From MindX",
   "main": "server.js",
   "scripts": {
-    "start": "nodemon server.js",
-    "vercel-build": "echo hello"
+    "start": "nodemon server.js"
   },
   "author": "MindX Team",
   "license": "MIT",
