@@ -45,6 +45,11 @@ app.use(
     swaggerUi.setup(specs, { explorer: true })
 );
 
+// Create GET request
+app.get("/", (req, res) => {
+    res.send("Learn on MindX");
+  });
+
 app.get('/api/v1/books', async (req, res) => {
     try {
         const results = await db.query("SELECT * FROM books");
