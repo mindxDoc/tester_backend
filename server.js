@@ -8,7 +8,6 @@ const morgan = require('morgan');
 const app = express();
 const swaggerJsdoc = require("swagger-jsdoc");
 const swaggerUi = require("swagger-ui-express");
-const { log } = require("console");
 
 app.use(cors());
 app.use(express.json());
