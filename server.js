@@ -33,7 +33,7 @@ const options = {
         },
         servers: [
             {
-                url: process.env.SWAGGER_URL,
+                url: `localhost:${port}`,
             },
         ],
     },
