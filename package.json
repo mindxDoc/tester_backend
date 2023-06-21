@@ -4,11 +4,12 @@
   "description": "Book Review System From MindX",
   "main": "server.js",
   "scripts": {
-    "start": "nodemon server.js"
+    "start": "node server.js"
   },
   "author": "MindX Team",
   "license": "MIT",
   "dependencies": {
+    "cors": "^2.8.5",
     "dotenv": "^16.3.1",
     "express": "^4.18.2",
     "morgan": "^1.10.0",

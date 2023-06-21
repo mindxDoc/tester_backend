@@ -1,34 +1,14 @@
 {
     "builds": [
         {
-            "src": "server.js",
+            "src": "./server.js",
             "use": "@vercel/node"
         }
     ],
     "routes": [
         {
-            "src": "/api/v1/books",
-            "dest": "/api/v1/books"
-        },
-        {
-            "src": "/api/v1/books/:id",
-            "dest": "/api/v1/books/:id"
-        },
-        {
-            "src": "/api/v1/books",
-            "dest": "/api/v1/books"
-        },
-        {
-            "src": "/api/v1/books/:id",
-            "dest": "/api/v1/books/:id"
-        },
-        {
-            "src": "/api/v1/books/:id",
-            "dest": "/api/v1/books/:id"
-        },
-        {
             "src": "/(.*)",
-            "dest": "/"
+            "dest": "server.js"
         }
     ]
 }
