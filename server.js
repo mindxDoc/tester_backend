@@ -13,6 +13,9 @@ app.use(cors());
 app.use(express.static('public'))
 const port = process.env.PORT || 3001;
 
+const CSS_URL =
+    "https://cdnjs.cloudflare.com/ajax/libs/swagger-ui/4.1.0/swagger-ui.min.css";
+
 const options = {
     definition: {
         openapi: "3.1.0",
@@ -33,7 +36,8 @@ const options = {
         },
         servers: [
             {
-                url: `localhost:${port}`,
+                url: process.env.SWAGGER_URL,
+                description: "My API Documentation",
             },
         ],
     },
@@ -44,13 +48,13 @@ const specs = swaggerJsdoc(options);
 app.use(
     "/api-docs",
     swaggerUi.serve,
-    swaggerUi.setup(specs, { explorer: true })
+    swaggerUi.setup(specs, { explorer: true, customCssUrl: CSS_URL })
 );
 
 // Create GET request
 app.get("/", (req, res) => {
-    res.sendFile('index.html', {root: path.join(__dirname, 'public')});
-  });
+    res.sendFile('index.html', { root: path.join(__dirname, 'public') });
+});
 
 app.get('/api/v1/books', async (req, res) => {
     try {
