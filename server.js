@@ -19,8 +19,7 @@ dotevn.config();
 
 app.use(morgan("dev"));
 
-const CSS_URL =
-    "https://cdnjs.cloudflare.com/ajax/libs/swagger-ui/4.1.0/swagger-ui.min.css";
+const CSS_URL = "https://cdnjs.cloudflare.com/ajax/libs/swagger-ui/4.1.0/swagger-ui.min.css";
 
 const options = {
     definition: {
@@ -47,14 +46,14 @@ const options = {
             },
         ],
     },
-    apis: ["./routes/books.js"],
+    apis: ["./routes/*.js"],
 };
 
 const specs = swaggerJsdoc(options);
 app.use(
     "/api-docs",
     swaggerUi.serve,
-    swaggerUi.setup(specs, { explorer: true, customCssUrl: CSS_URL })
+    swaggerUi.setup(specs, { customCssUrl: CSS_URL })
 );
 
 app.use("/api/v1/books", bookRouter)
