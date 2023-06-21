@@ -1,3 +1,11 @@
+const express = require('express');
+const bodyParser = require('body-parser');
+const db = require("../db");
+
+const bookRouter = express.Router();
+
+bookRouter.use(bodyParser.json());
+
 /**
  * @swagger
  * components:
@@ -50,6 +58,10 @@
  * tags:
  *   name: Books
  *   description: The books managing API
+ */
+
+/**
+ * @swagger
  * /api/v1/books:
  *   get:
  *     summary: Lists all the books
@@ -63,6 +75,26 @@
  *               type: array
  *               items:
  *                 $ref: '#/components/schemas/Book'
+ */
+
+bookRouter.get('/', async (req, res) => {
+    try {
+        const results = await db.query("SELECT * FROM books");
+        res.status(200).json({
+            status: "success",
+            results: results.rows.length,
+            data: {
+                book: results.rows,
+            }
+        })
+    } catch (err) {
+        console.log(err);
+    }
+});
+
+/**
+ * @swagger
+ * /api/v1/books:
  *   post:
  *     summary: Create a new book
  *     tags: [Books]
@@ -94,6 +126,25 @@
  *               $ref: '#/components/schemas/Book'
  *       500:
  *         description: Some server error
+ */
+
+bookRouter.post('/', async (req, res) => {
+    try {
+        const results = await db.query("INSERT INTO books (title, author, price, publisher) VALUES ($1, $2, $3, $4) RETURNING *",
+            [req.body.title, req.body.author, req.body.price, req.body.publisher]);
+        res.status(200).json({
+            status: "success",
+            data: {
+                book: results.rows[0],
+            }
+        })
+    } catch (err) {
+        console.log(err);
+    }
+});
+
+/**
+ * @swagger
  * /api/v1/books/{id}:
  *   get:
  *     summary: Get the book by id
@@ -114,6 +165,25 @@
  *               $ref: '#/components/schemas/Book'
  *       404:
  *         description: The book was not found
+ */
+
+bookRouter.get('/:id', async (req, res) => {
+    try {
+        const results = await db.query(`SELECT * FROM books WHERE id = ${req.params.id}`);
+        res.status(200).json({
+            status: "success",
+            data: {
+                book: results.rows[0],
+            }
+        })
+    } catch (err) {
+        console.log(err);
+    }
+});
+
+/**
+ * @swagger
+ * /api/v1/books/{id}:
  *   put:
  *    summary: Update the book by the id
  *    tags: [Books]
@@ -154,6 +224,26 @@
  *        description: The book was not found
  *      500:
  *        description: Some error happened
+ */
+
+bookRouter.put('/:id', async (req, res) => {
+    try {
+        const results = await db.query("UPDATE books SET title = $1, author = $2, price = $3, publisher = $4 WHERE id = $5 RETURNING *",
+            [req.body.title, req.body.author, req.body.price, req.body.publisher, req.params.id]);
+        res.status(200).json({
+            status: "success",
+            data: {
+                book: results.rows[0],
+            }
+        })
+    } catch (error) {
+        console.log(err);
+    }
+});
+
+/**
+ * @swagger
+ * /api/v1/books/{id}:
  *   delete:
  *     summary: Remove the book by id
  *     tags: [Books]
@@ -171,3 +261,18 @@
  *       404:
  *         description: The book was not found
  */
+
+bookRouter.delete('/:id', async (req, res) => {
+    try {
+        const results = db.query("DELETE FROM books WHERE id = $1", [
+            req.params.id,
+        ]);
+        res.status(204).json({
+            status: "success"
+        })
+    } catch (err) {
+        console.log(err);
+    }
+});
+
+module.exports = bookRouter;
