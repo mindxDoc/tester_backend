@@ -16,17 +16,14 @@
         },
         {
             "src": "/api/v1/books",
-            "method": "post",
             "dest": "/api/v1/books"
         },
         {
             "src": "/api/v1/books/:id",
-            "method": "put",
             "dest": "/api/v1/books/:id"
         },
         {
             "src": "/api/v1/books/:id",
-            "method": "delete",
             "dest": "/api/v1/books/:id"
         },
         {
