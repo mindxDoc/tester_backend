@@ -7,7 +7,7 @@ const pool = new Pool({
     database: process.env.PGDATABASE,
     password: process.env.PGPASSWORD,
     port: 5432,
-    ssl: true,
+    ssl: false,
 })
 
 module.exports = {

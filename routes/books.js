@@ -8,6 +8,7 @@
  *         - title
  *         - author
  *         - price
+ *         - publisher
  *       properties:
  *         id:
  *           type: number
@@ -22,6 +23,9 @@
  *           type: number
  *           format: currency
  *           description: The pricing of the book
+ *         publisher:
+ *           type: string
+ *           description: The publisher of the book
  *         created_at:
  *           type: string
  *           format: date
@@ -31,6 +35,7 @@
  *         title: 'Sapiens: Người tiến hóa'
  *         author: Yuval Noah Harari
  *         price: 250000
+ *         publisher: 'NXB Văn Học'
  *         created_at: 2022-03-10T04:05:06.157Z
  */
 
@@ -70,7 +75,7 @@
  *               $ref: '#/components/schemas/Book'
  *       500:
  *         description: Some server error
- * /api/v1/books/:id:
+ * /api/v1/books/{id}:
  *   get:
  *     summary: Get the book by id
  *     tags: [Books]

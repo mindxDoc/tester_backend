@@ -5,11 +5,13 @@ const db = require("./db");
 const path = require('path');
 const morgan = require('morgan');
 
-const app = express(),
-    swaggerJsdoc = require("swagger-jsdoc"),
-    swaggerUi = require("swagger-ui-express");
+const app = express();
+const swaggerJsdoc = require("swagger-jsdoc");
+const swaggerUi = require("swagger-ui-express");
+const { log } = require("console");
 
 app.use(cors());
+app.use(express.json());
 app.use(express.static('public'))
 const port = process.env.PORT || 3001;
 
@@ -41,7 +43,7 @@ const options = {
             },
         ],
     },
-    apis: ["./routes/*.js"],
+    apis: ["./routes/books.js"],
 };
 
 const specs = swaggerJsdoc(options);
@@ -54,6 +56,7 @@ app.use(
 // Create GET request
 app.get("/", (req, res) => {
     res.sendFile('index.html', { root: path.join(__dirname, 'public') });
+    res.send("hello")
 });
 
 app.get('/api/v1/books', async (req, res) => {
@@ -89,8 +92,8 @@ app.get('/api/v1/books/:id', async (req, res) => {
 // Create a book
 app.post('/api/v1/books', async (req, res) => {
     try {
-        const results = await db.query("INSERT INTO books (title, author, price) VALUES ($1, $2, $3) RETURNING *",
-            [req.body.title, req.body.author, req.body.price]);
+        const results = await db.query("INSERT INTO books (title, author, price, publisher) VALUES ($1, $2, $3, $4) RETURNING *",
+            [req.body.title, req.body.author, req.body.price, req.body.publisher]);
         res.status(200).json({
             status: "success",
             data: {
@@ -105,8 +108,8 @@ app.post('/api/v1/books', async (req, res) => {
 // Update a book
 app.put('/api/v1/books/:id', async (req, res) => {
     try {
-        const results = await db.query("UPDATE books SET title = $1, author = $2, price = $3 WHERE id = $4 RETURNING *",
-            [req.body.title, req.body.author, req.body.price, req.params.id]);
+        const results = await db.query("UPDATE books SET title = $1, author = $2, price = $3, publisher = $4 WHERE id = $5 RETURNING *",
+            [req.body.title, req.body.author, req.body.price, req.body.publisher, req.params.id]);
         res.status(200).json({
             status: "success",
             data: {
