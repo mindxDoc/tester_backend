@@ -1,21 +1,20 @@
-const express = require('express');
-const dotevn = require('dotenv');
-const morgan = require('morgan');
-const cors = require('cors');
-const bodyParser = require('body-parser');
-const swaggerJsdoc = require("swagger-jsdoc");
-const swaggerUi = require("swagger-ui-express");
-const path = require('path');
+import express from 'express';
+import dotenv from 'dotenv';
+import morgan from 'morgan';
+import cors from 'cors';
+import bodyParser from 'body-parser';
+import swaggerJsdoc from "swagger-jsdoc";
+import swaggerUI from "swagger-ui-express";
 
-const bookRouter = require('./routes/books');
+import bookRouter from './src/routes/books.js';
+import indexRouter from "./src/index.js";
 
 const app = express();
 
 app.use(bodyParser.json());
 app.use(cors());
-app.use(express.static('public'))
 const port = process.env.PORT || 3001;
-dotevn.config();
+dotenv.config();
 
 app.use(morgan("dev"));
 
@@ -46,25 +45,21 @@ const options = {
             },
         ],
     },
-    apis: ["./routes/*.js"],
+    apis: ["src/**/*.js"],
 };
 
 const specs = swaggerJsdoc(options);
 app.use(
     "/api-docs",
-    swaggerUi.serve,
-    swaggerUi.setup(specs, { customCssUrl: CSS_URL })
+    swaggerUI.serve,
+    swaggerUI.setup(specs, { customCssUrl: CSS_URL })
 );
 
-app.use("/api/v1/books", bookRouter)
-
-// Create GET request
-app.get("/", (req, res) => {
-    res.sendFile('index.html', { root: path.join(__dirname, 'public') });
-});
+app.use("/", indexRouter);
+app.use("/api/v1/books", bookRouter);
 
 app.listen(port, () => {
     console.log(`Server listening on port ${port}`);
 });
 
-module.exports = app;
+export default app;

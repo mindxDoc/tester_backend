@@ -1,8 +1,8 @@
-const express = require('express');
-const bodyParser = require('body-parser');
-const db = require("../db");
+import { Router } from 'express';
+import bodyParser from 'body-parser';
+import { query } from "../db/index.js";
 
-const bookRouter = express.Router();
+const bookRouter = Router();
 
 bookRouter.use(bodyParser.json());
 
@@ -79,7 +79,7 @@ bookRouter.use(bodyParser.json());
 
 bookRouter.get('/', async (req, res) => {
     try {
-        const results = await db.query("SELECT * FROM books");
+        const results = await query("SELECT * FROM books");
         res.status(200).json({
             status: "success",
             results: results.rows.length,
@@ -130,7 +130,7 @@ bookRouter.get('/', async (req, res) => {
 
 bookRouter.post('/', async (req, res) => {
     try {
-        const results = await db.query("INSERT INTO books (title, author, price, publisher) VALUES ($1, $2, $3, $4) RETURNING *",
+        const results = await query("INSERT INTO books (title, author, price, publisher) VALUES ($1, $2, $3, $4) RETURNING *",
             [req.body.title, req.body.author, req.body.price, req.body.publisher]);
         res.status(200).json({
             status: "success",
@@ -169,7 +169,7 @@ bookRouter.post('/', async (req, res) => {
 
 bookRouter.get('/:id', async (req, res) => {
     try {
-        const results = await db.query(`SELECT * FROM books WHERE id = ${req.params.id}`);
+        const results = await query(`SELECT * FROM books WHERE id = ${req.params.id}`);
         res.status(200).json({
             status: "success",
             data: {
@@ -228,7 +228,7 @@ bookRouter.get('/:id', async (req, res) => {
 
 bookRouter.put('/:id', async (req, res) => {
     try {
-        const results = await db.query("UPDATE books SET title = $1, author = $2, price = $3, publisher = $4 WHERE id = $5 RETURNING *",
+        const results = await query("UPDATE books SET title = $1, author = $2, price = $3, publisher = $4 WHERE id = $5 RETURNING *",
             [req.body.title, req.body.author, req.body.price, req.body.publisher, req.params.id]);
         res.status(200).json({
             status: "success",
@@ -264,7 +264,7 @@ bookRouter.put('/:id', async (req, res) => {
 
 bookRouter.delete('/:id', async (req, res) => {
     try {
-        const results = db.query("DELETE FROM books WHERE id = $1", [
+        const results = query("DELETE FROM books WHERE id = $1", [
             req.params.id,
         ]);
         res.status(204).json({
@@ -275,4 +275,4 @@ bookRouter.delete('/:id', async (req, res) => {
     }
 });
 
-module.exports = bookRouter;
+export default bookRouter;
