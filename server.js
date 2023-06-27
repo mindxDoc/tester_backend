@@ -6,8 +6,10 @@ import bodyParser from 'body-parser';
 import swaggerJsdoc from "swagger-jsdoc";
 import swaggerUI from "swagger-ui-express";
 
+import userRouter from './src/routes/users.js';
 import bookRouter from './src/routes/books.js';
 import indexRouter from "./src/index.js";
+import authRouter from "./src/routes/jwtAuth.js";
 
 const app = express();
 
@@ -49,13 +51,15 @@ const options = {
 };
 
 const specs = swaggerJsdoc(options);
+
 app.use(
     "/api-docs",
     swaggerUI.serve,
     swaggerUI.setup(specs, { customCssUrl: CSS_URL })
 );
-
+app.use("/auth", authRouter);
 app.use("/", indexRouter);
+app.use("/api/v1/user", userRouter);
 app.use("/api/v1/books", bookRouter);
 
 app.listen(port, () => {
