@@ -1,14 +1,9 @@
 import express from "express";
 import cors from "cors";
-import morgan from "morgan";
-import bodyParser from "body-parser";
 import { fileURLToPath } from "url";
 import path from "path";
 
 const router = express();
-
-router.use(bodyParser.json()); // to use body object in requests
-router.use(morgan("dev"));
 router.use(cors());
 
 router.set("view engine", "ejs");
