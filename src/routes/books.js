@@ -1,10 +1,8 @@
 import { Router } from 'express';
-import bodyParser from 'body-parser';
+import authorize from '../middleware/authorize.js';
 import { query } from "../db/index.js";
 
 const bookRouter = Router();
-
-bookRouter.use(bodyParser.json());
 
 /**
  * @swagger
@@ -77,9 +75,9 @@ bookRouter.use(bodyParser.json());
  *                 $ref: '#/components/schemas/Book'
  */
 
-bookRouter.get('/', async (req, res) => {
+bookRouter.get('/', authorize, async (req, res) => {
     try {
-        const results = await query("SELECT * FROM books");
+        const results = await query("SELECT u.user_name, b.* FROM users u JOIN books b ON u.user_id = b.user_id");
         res.status(200).json({
             status: "success",
             results: results.rows.length,
@@ -88,7 +86,7 @@ bookRouter.get('/', async (req, res) => {
             }
         })
     } catch (err) {
-        console.log(err);
+        console.log(err.message);
     }
 });
 
@@ -128,10 +126,11 @@ bookRouter.get('/', async (req, res) => {
  *         description: Some server error
  */
 
-bookRouter.post('/', async (req, res) => {
+bookRouter.post('/', authorize, async (req, res) => {
     try {
-        const results = await query("INSERT INTO books (title, author, price, publisher) VALUES ($1, $2, $3, $4) RETURNING *",
-            [req.body.title, req.body.author, req.body.price, req.body.publisher]);
+        const results = await query("INSERT INTO books (user_id, book_title, book_author, book_review) VALUES ($1, $2, $3, $4) RETURNING *",
+            [req.user.id, req.body.title, req.body.author, req.body.review]);
+        console.log(results);
         res.status(200).json({
             status: "success",
             data: {
@@ -139,7 +138,8 @@ bookRouter.post('/', async (req, res) => {
             }
         })
     } catch (err) {
-        console.log(err);
+        console.log(err.message);
+        res.status(500).send("Server error");
     }
 });
 
@@ -167,9 +167,9 @@ bookRouter.post('/', async (req, res) => {
  *         description: The book was not found
  */
 
-bookRouter.get('/:id', async (req, res) => {
+bookRouter.get('/:id', authorize, async (req, res) => {
     try {
-        const results = await query(`SELECT * FROM books WHERE id = ${req.params.id}`);
+        const results = await query(`SELECT * FROM books WHERE book_id = ${req.params.id}`);
         res.status(200).json({
             status: "success",
             data: {
@@ -177,7 +177,7 @@ bookRouter.get('/:id', async (req, res) => {
             }
         })
     } catch (err) {
-        console.log(err);
+        console.log(err.message);
     }
 });
 
@@ -226,10 +226,15 @@ bookRouter.get('/:id', async (req, res) => {
  *        description: Some error happened
  */
 
-bookRouter.put('/:id', async (req, res) => {
+bookRouter.put('/:id', authorize, async (req, res) => {
     try {
-        const results = await query("UPDATE books SET title = $1, author = $2, price = $3, publisher = $4 WHERE id = $5 RETURNING *",
-            [req.body.title, req.body.author, req.body.price, req.body.publisher, req.params.id]);
+        const results = await query("UPDATE books SET book_title = $1, book_author = $2, book_review = $3 WHERE book_id = $4 AND user_id = $5 RETURNING *",
+            [req.body.title, req.body.author, req.body.review, req.params.id, req.user.id]);
+
+        if (results.rows.length === 0) {
+            return res.json("This book review is not yours");
+        }
+
         res.status(200).json({
             status: "success",
             data: {
@@ -237,7 +242,7 @@ bookRouter.put('/:id', async (req, res) => {
             }
         })
     } catch (error) {
-        console.log(err);
+        console.log(err.message);
     }
 });
 
@@ -262,16 +267,21 @@ bookRouter.put('/:id', async (req, res) => {
  *         description: The book was not found
  */
 
-bookRouter.delete('/:id', async (req, res) => {
+bookRouter.delete('/:id', authorize, async (req, res) => {
     try {
-        const results = query("DELETE FROM books WHERE id = $1", [
-            req.params.id,
+        const results = query("DELETE FROM books WHERE book_id = $1 AND user_id = $2", [
+            req.params.id, req.user.id
         ]);
+
+        if (results.rows.length === 0) {
+            return res.json("This book review is not yours");
+        }
+
         res.status(204).json({
             status: "success"
         })
     } catch (err) {
-        console.log(err);
+        console.log(err.message);
     }
 });
 
