@@ -77,7 +77,7 @@ const bookRouter = Router();
 
 bookRouter.get('/', authorize, async (req, res) => {
     try {
-        const results = await query("SELECT u.user_name, b.* FROM users u JOIN books b ON u.user_id = b.user_id");
+        const results = await query("SELECT u.user_name, b.* FROM users u JOIN books b ON u.user_id = b.user_id WHERE u.user_id = $1", [req.user.id]);
         res.status(200).json({
             status: "success",
             results: results.rows.length,
