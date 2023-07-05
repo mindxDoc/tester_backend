@@ -251,19 +251,20 @@ bookRouter.put('/:id', authorize, async (req, res) => {
 
 bookRouter.delete('/:id', authorize, async (req, res) => {
     try {
-        const results = query("DELETE FROM books WHERE book_id = $1 AND user_id = $2", [
+        const results = await query("DELETE FROM books WHERE book_id = $1 AND user_id = $2", [
             req.params.id, req.user.id
         ]);
 
-        if (results.rows.length === 0) {
-            return res.json("This book review is not yours");
+        if (results.rowCount === 0) {
+            return res.status(403).json({ error: "This book review is not yours" });
         }
 
         res.status(204).json({
             status: "success"
-        })
+        });
     } catch (err) {
         console.log(err.message);
+        res.status(500).json({ error: "An error occurred while deleting the book" });
     }
 });
 
