@@ -13,8 +13,7 @@ const bookRouter = Router();
  *       required:
  *         - title
  *         - author
- *         - price
- *         - publisher
+ *         - review
  *       properties:
  *         id:
  *           type: integer
@@ -29,26 +28,15 @@ const bookRouter = Router();
  *           type: string
  *           example: Mark Twain
  *           description: The book author
- *         price:
- *           type: integer
- *           format: int64
- *           example: 1000000
- *           description: The pricing of the book
- *         publisher:
+ *         review:
  *           type: string
  *           example: NXB Trẻ
  *           description: The publisher of the book
- *         created_at:
- *           type: string
- *           format: date
- *           description: The date the book was added
  *       example:
  *         id: 1
  *         title: 'Sapiens: Người tiến hóa'
  *         author: Yuval Noah Harari
- *         price: 250000
- *         publisher: NXB Văn Học
- *         created_at: 2022-03-10T04:05:06.157Z
+ *         review: NXB Văn Học
  */
 
 /**
@@ -109,10 +97,7 @@ bookRouter.get('/', authorize, async (req, res) => {
  *               author:
  *                 type: string
  *                 example: Yuval Noah Harari
- *               price:
- *                 type: integer
- *                 example: 250000
- *               publisher:
+ *               review:
  *                 type: string
  *                 example: NXB Văn Học
  *     responses:
@@ -207,10 +192,7 @@ bookRouter.get('/:id', authorize, async (req, res) => {
  *               author:
  *                 type: string
  *                 example: Yuval Noah Harari
- *               price:
- *                 type: integer
- *                 example: 250000
- *               publisher:
+ *               review:
  *                 type: string
  *                 example: NXB Văn Học
  *    responses:
