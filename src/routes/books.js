@@ -52,6 +52,13 @@ const bookRouter = Router();
  *   get:
  *     summary: Lists all the books
  *     tags: [Books]
+ *     parameters:
+ *       - name: token
+ *         in: header
+ *         description: 'token'
+ *         required: true
+ *         schema:
+ *            type: string
  *     responses:
  *       200:
  *         description: The list of the books
@@ -84,6 +91,13 @@ bookRouter.get('/', authorize, async (req, res) => {
  *   post:
  *     summary: Create a new book
  *     tags: [Books]
+ *     parameters:
+ *       - name: token
+ *         in: header
+ *         description: 'token'
+ *         required: true
+ *         schema:
+ *            type: string
  *     requestBody:
  *       required: true
  *       content:
@@ -141,6 +155,12 @@ bookRouter.post('/', authorize, async (req, res) => {
  *           type: number
  *         required: true
  *         description: The book id
+ *       - name: token
+ *         in: header
+ *         description: 'token'
+ *         required: true
+ *         schema:
+ *            type: string
  *     responses:
  *       200:
  *         description: The book response by id
@@ -179,6 +199,12 @@ bookRouter.get('/:id', authorize, async (req, res) => {
  *          type: number
  *        required: true
  *        description: The book id
+ *      - name: token
+ *        in: header
+ *        description: 'token'
+ *        required: true
+ *        schema:
+ *          type: string
  *    requestBody:
  *      required: true
  *      content:
@@ -241,7 +267,12 @@ bookRouter.put('/:id', authorize, async (req, res) => {
  *           type: number
  *         required: true
  *         description: The book id
- *
+ *       - name: token
+ *         in: header
+ *         description: 'token'
+ *         required: true
+ *         schema:
+ *           type: string
  *     responses:
  *       204:
  *         description: The book was deleted

@@ -52,6 +52,13 @@ const userRouter = Router();
  *   get:
  *     summary: Get current user logged in
  *     tags: [Users]
+ *     parameters:
+ *       - name: token
+ *         in: header
+ *         description: 'token'
+ *         required: true
+ *         schema:
+ *           type: string
  *     responses:
  *       200:
  *         description: The list of the reviewed book
