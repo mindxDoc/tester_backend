@@ -22,15 +22,15 @@ const authRouter = Router();
  *           schema:
  *             type: object
  *             properties:
- *                user_name:
+ *                name:
  *                  type: string
  *                  example: admin
  *                  description: The name of account
- *                user_email:
+ *                email:
  *                  type: string
  *                  example: admin@mindx.vn
  *                  description: The email of account
- *                user_password:
+ *                password:
  *                  type: string
  *                  example: mindxdream
  *                  description: The password of account
@@ -91,11 +91,11 @@ authRouter.post("/register", validInfo, async (req, res) => {
  *           schema:
  *             type: object
  *             properties:
- *                user_email:
+ *                email:
  *                  type: string
  *                  example: admin@mindx.vn
  *                  description: The email of account
- *                user_password:
+ *                password:
  *                  type: string
  *                  example: mindxdream
  *                  description: The password of account
@@ -155,15 +155,15 @@ authRouter.post("/login", validInfo, async (req, res) => {
  *           schema:
  *             type: object
  *             properties:
- *                user_name:
+ *                name:
  *                  type: string
  *                  example: admin
  *                  description: The name of account
- *                user_email:
+ *                email:
  *                  type: string
  *                  example: admin@mindx.vn
  *                  description: The email of account
- *                user_password:
+ *                password:
  *                  type: string
  *                  example: mindxdream
  *                  description: The password of account
